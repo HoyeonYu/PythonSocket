@@ -4,6 +4,7 @@ import time
 
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.support.select import Select
 
 
 def check_exists_by_id(id):
@@ -59,6 +60,10 @@ def getLMSSubject(connection):
     url = 'https://lms.sungshin.ac.kr/ilos/main/main_form.acl'
     driver.get(url)
 
+    languangeChange = Select(driver.find_element_by_css_selector('#LANG'))
+    languangeChange.select_by_index(0)
+    print("Translate Done")
+
     userName = driver.find_element_by_xpath("//*[@id=\"user\"]").text
     connection.sendall(bytes(userName + "\n", 'utf-8')) #name
     print(userName)
@@ -77,10 +82,9 @@ def getLMSSubject(connection):
             connection.sendall(bytes("LectureDone\n", 'utf-8'))
             break
 
-        print(lectureTitle)
         realLectureIdx += 1
 
-        connection.sendall(bytes(lectureTitle + "\n", 'utf-8')) # lecture name
+        connection.sendall(bytes(lectureTitle[4:] + "\n", 'utf-8')) # lecture name
         innerLecture = driver.find_element_by_xpath("//*[@id=\"menu_lecture_weeks\"]")
         innerLecture.click()
 
@@ -88,6 +92,11 @@ def getLMSSubject(connection):
             print("exist")
             innerLecturePerTexts = driver.find_elements_by_id("per_text")
             connection.sendall(bytes(str(len(innerLecturePerTexts)) + "\n", 'utf-8'))   # inner lecture num
+
+            innerLecturePeriod = driver.find_element_by_xpath(
+                "//*[@id=\"lecture_form\"] / div[1] / div / ul / li[1] / ol / li[2] / div[2] ").text
+            print(innerLecturePeriod)
+            connection.sendall(bytes(innerLecturePeriod + "\n", 'utf-8'))  # inner lecture period
 
             for innerLectureIdx in range(len(innerLecturePerTexts)):
                 innerLecturePerText = innerLecturePerTexts[innerLectureIdx].text
@@ -98,6 +107,43 @@ def getLMSSubject(connection):
             connection.sendall(bytes("0\n", 'utf-8'))
             print("does not exist")
 
+        driver.get(driver.find_element_by_xpath("//*[@id=\"menu_report\"]").get_attribute("href"))
+
+        if check_exists_by_xpath("//*[@id=\"report_list\"]/table/tbody/tr[1]/td[1]"):
+            assignmentNum = driver.find_element_by_xpath("//*[@id=\"report_list\"]/table/tbody/tr[1]/td[1]").text
+            print("total assignment num: ", assignmentNum)
+
+            if assignmentNum != "조회할 자료가 없습니다" and assignmentNum != "No Data.":
+                connection.sendall(bytes(assignmentNum + "\n", 'utf-8'))  # total assignment num
+
+                for i in range (int(assignmentNum)):
+                    isAssignmentInPeriod = driver.find_element_by_xpath("//*[@id=\"report_list\"]/table/tbody/tr["
+                                                                        + str(i + 1) + "]/td[4]").text
+                    if isAssignmentInPeriod == "종료":
+                        connection.sendall(bytes("AssignmentDone\n", 'utf-8'))
+                        break
+
+                    assignmentName = driver.find_element_by_xpath("//*[@id=\"report_list\"]/table/tbody/tr["
+                                                                      + str(i + 1) + "]/td[3]/a/div[1]").text.replace('[', '').replace(']', '')
+                    connection.sendall(bytes(assignmentName + "\n", 'utf-8'))  # get assignment name
+                    print(assignmentName)
+
+                    isAssignmentSubmitted = driver.find_element_by_xpath("//*[@id=\"report_list\"]/table/tbody/tr["
+                                                                      + str(i + 1) + "]/td[5]/img").get_attribute("title")
+                    connection.sendall(bytes(isAssignmentSubmitted + "\n", 'utf-8'))   # if is assignment in period, get submitted
+                    print(isAssignmentSubmitted)
+
+                    assignmentPeriod = driver.find_element_by_xpath("//*[@id=\"report_list\"]/table/tbody/tr["
+                                                                    + str(i + 1) + "]/td[8]").text
+                    connection.sendall(bytes(assignmentPeriod + "\n", 'utf-8')) # if is assignment in period, get deadline
+                    print(assignmentPeriod)
+            else:
+                connection.sendall(bytes("AssignmentDone\n", 'utf-8'))
+
+        else:
+            print("no assignment")
+
+        # report_list > table > tbody > tr:nth-child(1) > td:nth-child(4)
         driver.get(url)
         outerLectures = driver.find_elements_by_class_name("sub_open")
         outerLecturesIdx += 1
@@ -110,19 +156,19 @@ def getLMSSubject(connection):
 def handle(connection, address):
     try:
         input = connection.recv(1024).decode('utf-8')
-        print("input: " + input)
-        print(input.split("\n"))
+        #print("input: " + input)
+        #print(input.split("\n"))
 
         if len(input.split("\n")) == 2:
             id = input
             pw = connection.recv(1024).decode('utf-8')
-            print("pw: " + pw)
+            #print("pw: " + pw)
 
         else:
             id = input.split("\n")[0] + "\n"
             pw = input.split("\n")[1] + "\n"
-            print("split id: " + id)
-            print("split pw: " + pw)
+
+        print("id: " + id)
 
         if getLMSLogin(str(id), str(pw)):
             connection.sendall(bytes("Success\n", 'utf-8'))
