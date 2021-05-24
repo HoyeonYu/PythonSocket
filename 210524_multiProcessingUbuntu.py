@@ -89,6 +89,10 @@ def getLMSSubject(connection):
         innerLecture.click()
 
         if check_exists_by_id("per_text"):
+            innerTotalLectureLength = driver.find_elements_by_class_name("wb-inner-wrap ")
+            driver.find_element_by_xpath("/ html / body / div[3] / div[2] / div / div[2] / div[2] / div[2] / "
+                                         "div / div[" + str(len(innerTotalLectureLength)) + "] / div").click()
+
             print("exist")
             innerLecturePerTexts = driver.find_elements_by_id("per_text")
             connection.sendall(bytes(str(len(innerLecturePerTexts)) + "\n", 'utf-8'))   # inner lecture num
