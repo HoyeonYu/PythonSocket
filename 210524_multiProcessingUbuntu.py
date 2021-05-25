@@ -57,8 +57,8 @@ def getLMSLogin(id, password):
 
 
 def getLMSSubject(connection):
-    url = 'https://lms.sungshin.ac.kr/ilos/main/main_form.acl'
-    driver.get(url)
+    mainLMSUrl = 'https://lms.sungshin.ac.kr/ilos/main/main_form.acl'
+    driver.get(mainLMSUrl)
 
     languangeChange = Select(driver.find_element_by_css_selector('#LANG'))
     languangeChange.select_by_index(0)
@@ -73,7 +73,26 @@ def getLMSSubject(connection):
     connection.sendall(bytes(str(len(outerLectures)) + "\n", 'utf-8'))  # total lecture num
     realLectureIdx = 0
 
-    for outerLecturesIdx in range(len(outerLectures)):
+    lectureListURL = 'https://lms.sungshin.ac.kr/ilos/mp/course_register_list_form.acl'
+    driver.get(lectureListURL)
+
+    totalLecturesList = []
+    for i in range (len(outerLectures)):
+        if check_exists_by_xpath("//*[@id=\"lecture_list\"]/div[1]/div[1]/div[" + str(i + 2) + "]"):
+            totalLecturesList.append("//*[@id=\"lecture_list\"]/div[1]/div[1]/div["
+                                    + str(i + 2) + "]")
+        else :
+            break
+
+    totalLecturesNum = len(totalLecturesList) - 1
+    print(totalLecturesNum)
+    connection.sendall(bytes(str(totalLecturesNum) + "\n", 'utf-8')) # real total num
+
+    driver.get(mainLMSUrl)
+    outerLectures = driver.find_elements_by_class_name("sub_open")
+    print(len(outerLectures))
+
+    for outerLecturesIdx in range(totalLecturesNum):
         print(outerLecturesIdx)
         outerLectures[outerLecturesIdx].click()
         lectureTitle = driver.find_element_by_class_name("welcome_subject").text
@@ -167,8 +186,7 @@ def getLMSSubject(connection):
         else:
             print("no assignment")
 
-        # report_list > table > tbody > tr:nth-child(1) > td:nth-child(4)
-        driver.get(url)
+        driver.get(mainLMSUrl)
         outerLectures = driver.find_elements_by_class_name("sub_open")
         outerLecturesIdx += 1
 
@@ -193,6 +211,13 @@ def handle(connection, address):
             pw = input.split("\n")[1] + "\n"
 
         print("id: " + id)
+
+        if len(id) != 9:
+            print("Error ID Form")
+            connection.sendall(bytes("Closing socket\n", 'utf-8'))
+            print("Close Client Socket")
+            connection.close()
+            return
 
         if getLMSLogin(str(id), str(pw)):
             connection.sendall(bytes("Success\n", 'utf-8'))
