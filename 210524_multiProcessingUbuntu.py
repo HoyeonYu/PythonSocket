@@ -88,25 +88,45 @@ def getLMSSubject(connection):
         innerLecture = driver.find_element_by_xpath("//*[@id=\"menu_lecture_weeks\"]")
         innerLecture.click()
 
+        isNotAvailPeriod = False
+
         if check_exists_by_id("per_text"):
             innerTotalLectureLength = driver.find_elements_by_class_name("wb-inner-wrap ")
             driver.find_element_by_xpath("/ html / body / div[3] / div[2] / div / div[2] / div[2] / div[2] / "
                                          "div / div[" + str(len(innerTotalLectureLength)) + "] / div").click()
 
-            print("exist")
-            innerLecturePerTexts = driver.find_elements_by_id("per_text")
-            connection.sendall(bytes(str(len(innerLecturePerTexts)) + "\n", 'utf-8'))   # inner lecture num
+            if check_exists_by_xpath("/ html / body / div[3] / div[2] / div / div[2] / div[2] / div[3] / div[1] / div[1] / div"):
+                print("try to go prev lecture")
 
-            innerLecturePeriod = driver.find_element_by_xpath(
-                "//*[@id=\"lecture_form\"] / div[1] / div / ul / li[1] / ol / li[2] / div[2] ").text
-            print(innerLecturePeriod)
-            connection.sendall(bytes(innerLecturePeriod + "\n", 'utf-8'))  # inner lecture period
+                if len(innerTotalLectureLength) > 1:
+                    driver.find_element_by_xpath("/ html / body / div[3] / div[2] / div / div[2] / div[2] / div[2] / "
+                                                 "div / div[" + str(len(innerTotalLectureLength) - 1) + "] / div").click()
+                    print("succ to go prev lecture")
 
-            for innerLectureIdx in range(len(innerLecturePerTexts)):
-                innerLecturePerText = innerLecturePerTexts[innerLectureIdx].text
-                connection.sendall(bytes(innerLecturePerText + "\n", 'utf-8'))  # inner lecture percentage
-                print(innerLectureIdx, innerLecturePerText)
-                innerLectureIdx += 1
+                else:
+                    isNotAvailPeriod = True
+                    print("not exist prev lecture")
+
+            if not isNotAvailPeriod:
+                print("exist")
+                innerLecturePerTexts = driver.find_elements_by_id("per_text")
+                connection.sendall(bytes(str(len(innerLecturePerTexts)) + "\n", 'utf-8'))   # inner lecture num
+
+                innerLecturePeriod = driver.find_element_by_xpath(
+                    "//*[@id=\"lecture_form\"] / div[1] / div / ul / li[1] / ol / li[2] / div[2] ").text
+                print(innerLecturePeriod)
+                connection.sendall(bytes(innerLecturePeriod + "\n", 'utf-8'))  # inner lecture period
+
+                for innerLectureIdx in range(len(innerLecturePerTexts)):
+                    innerLecturePerText = innerLecturePerTexts[innerLectureIdx].text
+                    connection.sendall(bytes(innerLecturePerText + "\n", 'utf-8'))  # inner lecture percentage
+                    print(innerLectureIdx, innerLecturePerText)
+                    innerLectureIdx += 1
+
+            else:
+                connection.sendall(bytes("0\n", 'utf-8'))
+                print("isNotAvailPeriod")
+
         else:
             connection.sendall(bytes("0\n", 'utf-8'))
             print("does not exist")
@@ -188,7 +208,6 @@ def handle(connection, address):
     connection.sendall(bytes("Closing socket\n", 'utf-8'))
     print("Close Client Socket")
     connection.close()
-
 
 class Server(object):
     def __init__(self, hostname, port):
