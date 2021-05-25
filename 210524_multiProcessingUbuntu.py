@@ -49,6 +49,7 @@ def getLMSLogin(id, password):
         alert = driver.switch_to.alert
         alert.accept()
         print("login fail, again?")
+        driver.close()
         return False
 
     except:
@@ -188,7 +189,6 @@ def getLMSSubject(connection):
 
         driver.get(mainLMSUrl)
         outerLectures = driver.find_elements_by_class_name("sub_open")
-        outerLecturesIdx += 1
 
     connection.sendall(bytes(str(realLectureIdx) + "\n", 'utf-8'))  # real lecture num
     print("real lecture num:", realLectureIdx)
