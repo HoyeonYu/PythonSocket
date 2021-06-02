@@ -22,6 +22,13 @@ def check_exists_by_xpath(xpath):
         return False
     return True
 
+def removePopUp():
+    try:
+        popUp = driver.find_elements_by_xpath('//*[@id="x_271"]/img')
+        for popUpUnit in popUp:
+            popUpUnit.click()
+    except:
+        print("no popUp")
 
 def getLMSLogin(id, password):
     options = webdriver.ChromeOptions()
@@ -87,6 +94,8 @@ def getLMSSubject(connection):
     totalLecturesNum = len(totalLecturesList) - 1
     # print(totalLecturesNum)
     connection.sendall(bytes(str(totalLecturesNum) + "\n", 'utf-8'))  # real total num
+
+    removePopUp()
 
     driver.get(mainLMSUrl)
     outerLectures = driver.find_elements_by_class_name("sub_open")
@@ -195,6 +204,7 @@ def getLMSSubject(connection):
         # print("no assignment")
 
         driver.get(mainLMSUrl)
+        removePopUp()
         outerLectures = driver.find_elements_by_class_name("sub_open")
 
     connection.sendall(bytes(str(realLectureIdx) + "\n", 'utf-8'))  # real lecture num
