@@ -1,19 +1,20 @@
 # UnivPlanner_ServerCode
 
 ## Putty Status
-![ezgif com-video-to-gif (2)](https://user-images.githubusercontent.com/53277342/123515836-1e053280-d6d4-11eb-91f2-3c7f59bd9300.gif)  
+https://user-images.githubusercontent.com/53277342/123517153-69bada80-d6da-11eb-8e9d-08bd6568b805.mp4
 
 ## (Background) Crawler Status
-![ezgif com-video-to-gif (3)](https://user-images.githubusercontent.com/53277342/123516781-cd440880-d6d8-11eb-86e1-b6529278aa76.gif)
-  
-![image](https://user-images.githubusercontent.com/53277342/123515659-3c1e6300-d6d3-11eb-82fe-0bdde1183c6b.png)
+https://user-images.githubusercontent.com/53277342/123517157-6c1d3480-d6da-11eb-9a47-d46225ab251e.mp4
 
-![image](https://user-images.githubusercontent.com/53277342/123515670-493b5200-d6d3-11eb-8917-4a4381f222b4.png)
 
-![image](https://user-images.githubusercontent.com/53277342/123515682-58220480-d6d3-11eb-8c42-aac8327f89e0.png)
+![image](https://user-images.githubusercontent.com/53277342/123517095-3f691d00-d6da-11eb-9f4c-93ef53faa5a1.png)
 
-![image](https://user-images.githubusercontent.com/53277342/123515693-653ef380-d6d3-11eb-9ab3-f385f777974c.png)
+![image](https://user-images.githubusercontent.com/53277342/123517098-42fca400-d6da-11eb-86e3-424d69512146.png)
 
-![image](https://user-images.githubusercontent.com/53277342/123515706-725be280-d6d3-11eb-80bf-4994e16809e0.png)
+![image](https://user-images.githubusercontent.com/53277342/123517102-44c66780-d6da-11eb-97e6-d914bfe2c213.png)
 
-![image](https://user-images.githubusercontent.com/53277342/123516934-9cb09e80-d6d9-11eb-926e-e3cff3be2fea.png)
+![image](https://user-images.githubusercontent.com/53277342/123517103-46902b00-d6da-11eb-9dda-7bc366b61620.png)
+
+![image](https://user-images.githubusercontent.com/53277342/123517108-498b1b80-d6da-11eb-9420-cbf5217f140f.png)
+
+![image](https://user-images.githubusercontent.com/53277342/123517111-4b54df00-d6da-11eb-9ff3-a10f21f01315.png)
