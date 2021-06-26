@@ -1,7 +1,7 @@
 # UnivPlanner_ServerCode
 
 ## Putty Status
-https://user-images.githubusercontent.com/53277342/123517153-69bada80-d6da-11eb-8e9d-08bd6568b805.mp4
+https://user-images.githubusercontent.com/53277342/123525465-d8fcf280-d70b-11eb-867a-a41e325e70cf.mp4
 
 ## (Background) Crawler Status
 https://user-images.githubusercontent.com/53277342/123517157-6c1d3480-d6da-11eb-9a47-d46225ab251e.mp4
