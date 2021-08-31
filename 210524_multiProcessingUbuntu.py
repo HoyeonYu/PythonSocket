@@ -259,7 +259,7 @@ def handle(connection, address):
         print(" Problem Handling Request")
 
     connection.sendall(bytes("Closing Socket\n", 'utf-8'))
-    print(" Close Client Socket")
+    print("\n Close Client Socket")
     connection.close()
     print(" ======================================\n")
     print(" Waiting For Client ...")
@@ -290,7 +290,7 @@ class Server(object):
 
 
 if __name__ == "__main__":
-    server = Server("0.0.0.0", 8080)
+    server = Server("0.0.0.0", 38497)
     print(" Hello from Server!")
 
     try:
