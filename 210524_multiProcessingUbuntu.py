@@ -8,30 +8,33 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.select import Select
 
 # Add School Name Here
-schoolName = ["성신여자대학교", "경북대학교", "한국외국어대학교", "서강대학교"]
+schoolName = ["성신여자대학교", "경북대학교", "한국외국어대학교", "서강대학교", "건국대학교"]
 
 # Add Login Page Here
 loginUrlList = [
-    "https://lms.sungshin.ac.kr/ilos/main/member/login_form.acl",  # SSWU
-    "https://lms.knu.ac.kr/ilos/main/member/login_form.acl",  # KNU
-    "https://eclass.hufs.ac.kr/ilos/main/member/login_form.acl",  # HUFS
-    "https://eclass.sogang.ac.kr/ilos/main/member/login_form.acl"  # Sogang
+    "https://lms.sungshin.ac.kr/ilos/main/member/login_form.acl",   # SSWU
+    "https://lms.knu.ac.kr/ilos/main/member/login_form.acl",        # KyeongBuk
+    "https://eclass.hufs.ac.kr/ilos/main/member/login_form.acl",    # HUFS
+    "https://eclass.sogang.ac.kr/ilos/main/member/login_form.acl",  # SoGang
+    "https://ecampus.konkuk.ac.kr/ilos/main/member/login_form.acl"  # KonKuk
 ]
 
 # Add Main Page Here
 mainUrlList = [
-    "https://lms.sungshin.ac.kr/ilos/main/main_form.acl",  # SSWU
-    "https://lms.knu.ac.kr/ilos/main/main_form.acl",  # KNU
-    "https://eclass.hufs.ac.kr/ilos/main/main_form.acl",  # HUFS
-    "https://eclass.sogang.ac.kr/ilos/main/main_form.acl"  # Sogang
+    "https://lms.sungshin.ac.kr/ilos/main/main_form.acl",       # SSWU
+    "https://lms.knu.ac.kr/ilos/main/main_form.acl",            # KyeongBuk
+    "https://eclass.hufs.ac.kr/ilos/main/main_form.acl",        # HUFS
+    "https://eclass.sogang.ac.kr/ilos/main/main_form.acl",      # Sogang
+    "https://ecampus.konkuk.ac.kr/ilos/main/main_form.acl"      # KonKuk
 ]
 
 # Add Total Lecture Page Here
 lectureUrlList = [
-    "https://lms.sungshin.ac.kr/ilos/mp/course_register_list_form.acl",  # SSWU
-    "https://lms.knu.ac.kr/ilos/mp/course_register_list_form.acl",  # KNU
-    "https://eclass.hufs.ac.kr/ilos/mp/course_register_list_form.acl",  # HUFS
-    "https://eclass.sogang.ac.kr/ilos/mp/course_register_list_form.acl"  # Sogang
+    "https://lms.sungshin.ac.kr/ilos/mp/course_register_list_form.acl",         # SSWU
+    "https://lms.knu.ac.kr/ilos/mp/course_register_list_form.acl",              # KyeongBuk
+    "https://eclass.hufs.ac.kr/ilos/mp/course_register_list_form.acl",          # HUFS
+    "https://eclass.sogang.ac.kr/ilos/mp/course_register_list_form.acl",        # Sogang
+    "https://ecampus.konkuk.ac.kr/ilos/mp/course_register_list_form.acl"        # KonKuk
 ]
 
 
