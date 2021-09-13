@@ -12,27 +12,28 @@ schoolName = ["성신여자대학교", "경북대학교", "한국외국어대학
 
 # Add Login Page Here
 loginUrlList = [
-    "https://lms.sungshin.ac.kr/ilos/main/member/login_form.acl",       # SSWU
-    "https://lms.knu.ac.kr/ilos/main/member/login_form.acl",            # KNU
-    "https://eclass.hufs.ac.kr/ilos/main/member/login_form.acl",        # HUFS
-    "https://eclass.sogang.ac.kr/ilos/main/member/login_form.acl"       # Sogang
+    "https://lms.sungshin.ac.kr/ilos/main/member/login_form.acl",  # SSWU
+    "https://lms.knu.ac.kr/ilos/main/member/login_form.acl",  # KNU
+    "https://eclass.hufs.ac.kr/ilos/main/member/login_form.acl",  # HUFS
+    "https://eclass.sogang.ac.kr/ilos/main/member/login_form.acl"  # Sogang
 ]
 
 # Add Main Page Here
 mainUrlList = [
-    "https://lms.sungshin.ac.kr/ilos/main/main_form.acl",       # SSWU
-    "https://lms.knu.ac.kr/ilos/main/main_form.acl",            # KNU
-    "https://eclass.hufs.ac.kr/ilos/main/main_form.acl",        # HUFS
-    "https://eclass.sogang.ac.kr/ilos/main/main_form.acl"       # Sogang
+    "https://lms.sungshin.ac.kr/ilos/main/main_form.acl",  # SSWU
+    "https://lms.knu.ac.kr/ilos/main/main_form.acl",  # KNU
+    "https://eclass.hufs.ac.kr/ilos/main/main_form.acl",  # HUFS
+    "https://eclass.sogang.ac.kr/ilos/main/main_form.acl"  # Sogang
 ]
 
 # Add Total Lecture Page Here
 lectureUrlList = [
-    "https://lms.sungshin.ac.kr/ilos/mp/course_register_list_form.acl",       # SSWU
-    "https://lms.knu.ac.kr/ilos/mp/course_register_list_form.acl",            # KNU
-    "https://eclass.hufs.ac.kr/ilos/mp/course_register_list_form.acl",        # HUFS
-    "https://eclass.sogang.ac.kr/ilos/mp/course_register_list_form.acl"       # Sogang
+    "https://lms.sungshin.ac.kr/ilos/mp/course_register_list_form.acl",  # SSWU
+    "https://lms.knu.ac.kr/ilos/mp/course_register_list_form.acl",  # KNU
+    "https://eclass.hufs.ac.kr/ilos/mp/course_register_list_form.acl",  # HUFS
+    "https://eclass.sogang.ac.kr/ilos/mp/course_register_list_form.acl"  # Sogang
 ]
+
 
 def check_exists_by_id(id):
     try:
@@ -49,13 +50,16 @@ def check_exists_by_xpath(xpath):
         return False
     return True
 
+
 def removePopUp():
     try:
-        popUp = driver.find_elements_by_xpath('//*[@id="x_271"]/img')
+        popUp = driver.find_elements_by_class_name('x')
         for popUpUnit in popUp:
             popUpUnit.click()
     except:
-        print("no popUp")
+        # print("no popUp")
+        print("", end="")
+
 
 def getLMSLogin(idx, id, password):
     options = webdriver.ChromeOptions()
@@ -118,14 +122,13 @@ def getLMSSubject(idx, connection):
     # print(totalLecturesNum)
     connection.sendall(bytes(str(totalLecturesNum) + "\n", 'utf-8'))  # real total num
 
-    removePopUp()
-
     driver.get(mainLMSUrl)
     outerLectures = driver.find_elements_by_class_name("sub_open")
     # print(len(outerLectures))
 
     for outerLecturesIdx in range(totalLecturesNum):
         # print(outerLecturesIdx)
+        removePopUp()
         outerLectures[outerLecturesIdx].click()
         lectureTitle = driver.find_element_by_class_name("welcome_subject").text
         lectureTitle = re.sub(r'\([^)]*\)', '', lectureTitle)
@@ -200,8 +203,9 @@ def getLMSSubject(idx, connection):
                         break
 
                     assignmentName = driver.find_element_by_xpath("//*[@id=\"report_list\"]/table/tbody/tr["
-                                                                  + str(i + 1) + "]/td[3]/a/div[1]").text.replace('[', '')\
-                                                                .replace(']', '').replace('.', '').replace('#', '').replace('$', '')
+                                                                  + str(i + 1) + "]/td[3]/a/div[1]").text.replace('[',
+                                                                                                                  '') \
+                        .replace(']', '').replace('.', '').replace('#', '').replace('$', '')
                     connection.sendall(bytes(assignmentName + "\n", 'utf-8'))  # get assignment name
                     # print(assignmentName)
 
