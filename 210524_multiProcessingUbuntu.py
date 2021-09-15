@@ -153,9 +153,9 @@ def getLMSSubject(idx, connection):
             innerTotalLectureLength = driver.find_elements_by_class_name("wb-inner-wrap ")
             driver.find_element_by_xpath("/ html / body / div[3] / div[2] / div / div[2] / div[2] / div[2] / "
                                          "div / div[" + str(len(innerTotalLectureLength)) + "] / div").click()
+            driver.implicitly_wait(0.1)
 
-            if check_exists_by_xpath(
-                    "/ html / body / div[3] / div[2] / div / div[2] / div[2] / div[3] / div / div[1] / div"):
+            if check_exists_by_xpath("/html/body/div[3]/div[2]/div/div[2]/div[2]/div[3]/div[1]/div[1]/div"):
                 # print("try to go prev lecture")
 
                 if len(innerTotalLectureLength) > 1:
@@ -264,15 +264,6 @@ def handle(connection, address):
             pw = input.split("\n")[2] + "\n"
 
             print(" " + schoolName[schoolIdx] + " -> id: " + id)
-            #
-            # if len(id) != 9:
-            #     print(" Error ID Form")
-            #     connection.sendall(bytes("Closing socket\n", 'utf-8'))
-            #     print(" Close Client Socket")
-            #     connection.close()
-            #     print(" ======================================\n")
-            #     print(" Waiting For Client ...")
-            #     return
 
             if getLMSLogin(schoolIdx, str(id), str(pw)):
                 connection.sendall(bytes("Success\n", 'utf-8'))
