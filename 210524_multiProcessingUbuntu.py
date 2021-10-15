@@ -12,32 +12,34 @@ schoolName = ["성신여자대학교", "경북대학교", "한국외국어대학
 
 # Add Login Page Here
 loginUrlList = [
-    "https://lms.sungshin.ac.kr/ilos/main/member/login_form.acl",   # SungShin Women's
-    "https://lms.knu.ac.kr/ilos/main/member/login_form.acl",        # KyeongBuk
-    "https://eclass.hufs.ac.kr/ilos/main/member/login_form.acl",    # HUFS
+    "https://lms.sungshin.ac.kr/ilos/main/member/login_form.acl",  # SungShin Women's
+    "https://lms.knu.ac.kr/ilos/main/member/login_form.acl",  # KyeongBuk
+    "https://eclass.hufs.ac.kr/ilos/main/member/login_form.acl",  # HUFS
     "https://eclass.sogang.ac.kr/ilos/main/member/login_form.acl",  # SoGang
-    "https://ecampus.konkuk.ac.kr/ilos/main/member/login_form.acl", # KonKuk
-    "https://cyber.swu.ac.kr/ilos/main/member/login_form.acl"       # Seoul Women's
+    "https://ecampus.konkuk.ac.kr/ilos/main/member/login_form.acl",  # KonKuk
+    "https://cyber.swu.ac.kr/ilos/main/member/login_form.acl"  # Seoul Women's
 ]
 
-# Add Main Page Here
-mainUrlList = [
-    "https://lms.sungshin.ac.kr/ilos/main/main_form.acl",       # SungShin Women's
-    "https://lms.knu.ac.kr/ilos/main/main_form.acl",            # KyeongBuk
-    "https://eclass.hufs.ac.kr/ilos/main/main_form.acl",        # HUFS
-    "https://eclass.sogang.ac.kr/ilos/main/main_form.acl",      # SoGang
-    "https://ecampus.konkuk.ac.kr/ilos/main/main_form.acl",     # KonKuk
-    "https://cyber.swu.ac.kr/ilos/main/main_form.acl"           # Seoul Women's
-]
+#
+# # Add Main Page Here
+# mainUrlList = [
+#     "https://lms.sungshin.ac.kr/ilos/main/main_form.acl",  # SungShin Women's
+#     "https://lms.knu.ac.kr/ilos/main/main_form.acl",  # KyeongBuk
+#     "https://eclass.hufs.ac.kr/ilos/main/main_form.acl",  # HUFS
+#     "https://eclass.sogang.ac.kr/ilos/main/main_form.acl",  # SoGang
+#     "https://ecampus.konkuk.ac.kr/ilos/main/main_form.acl",  # KonKuk
+#     "https://cyber.swu.ac.kr/ilos/main/main_form.acl"  # Seoul Women's
+# ]
 
 # Add Total Lecture Page Here
+
 lectureUrlList = [
-    "https://lms.sungshin.ac.kr/ilos/mp/course_register_list_form.acl",         # SungShin Women's
-    "https://lms.knu.ac.kr/ilos/mp/course_register_list_form.acl",              # KyeongBuk
-    "https://eclass.hufs.ac.kr/ilos/mp/course_register_list_form.acl",          # HUFS
-    "https://eclass.sogang.ac.kr/ilos/mp/course_register_list_form.acl",        # SoGang
-    "https://ecampus.konkuk.ac.kr/ilos/mp/course_register_list_form.acl",       # KonKuk
-    "https://cyber.swu.ac.kr/ilos/mp/course_register_list_form.acl"             # Seoul Women's
+    "https://lms.sungshin.ac.kr/ilos/mp/course_register_list_form.acl",  # SungShin Women's
+    "https://lms.knu.ac.kr/ilos/mp/course_register_list_form.acl",  # KyeongBuk
+    "https://eclass.hufs.ac.kr/ilos/mp/course_register_list_form.acl",  # HUFS
+    "https://eclass.sogang.ac.kr/ilos/mp/course_register_list_form.acl",  # SoGang
+    "https://ecampus.konkuk.ac.kr/ilos/mp/course_register_list_form.acl",  # KonKuk
+    "https://cyber.swu.ac.kr/ilos/mp/course_register_list_form.acl"  # Seoul Women's
 ]
 
 
@@ -57,8 +59,17 @@ def check_exists_by_xpath(xpath):
     return True
 
 
+def check_exists_by_class_multi_elements(className):
+    try:
+        driver.find_elements_by_class_name(className)
+    except NoSuchElementException:
+        return False
+    return True
+
+
 def removePopUp():
     try:
+        # Remove Pop Up by Class 'x'
         popUp = driver.find_elements_by_class_name('x')
         for popUpUnit in popUp:
             popUpUnit.click()
@@ -70,16 +81,21 @@ def removePopUp():
 def getLMSLogin(idx, id, password):
     options = webdriver.ChromeOptions()
     options.add_argument('--disable-extensions')
-    options.add_argument('--headless')
+    # Remove Below Line for Non-Background Page
+    # options.add_argument('--headless')
     # options.add_argument('--disable-gpu')
     options.add_argument('--no-sandbox')
 
+    # Set Chrome Driver
     global driver
     driver = webdriver.Chrome('/home/compu/Downloads/UnivPlanner_ServerCode/chromedriver', chrome_options=options)
+
+    # Go Login Page
     driver.get(loginUrlList[idx])
     print(" LMS Login Start :", end=" ")
     # print(driver.current_url)
 
+    # Input ID and PW in Login Page
     elementID = driver.find_element_by_xpath("//*[@id=\"usr_id\"]")
     elementID.send_keys(id)
 
@@ -87,6 +103,7 @@ def getLMSLogin(idx, id, password):
     elementPW.send_keys(password)
 
     try:
+        # Remove Alert Window
         alert = driver.switch_to.alert
         alert.accept()
         print("Login Failed, Again?")
@@ -99,49 +116,69 @@ def getLMSLogin(idx, id, password):
 
 
 def getLMSSubject(idx, connection):
-    mainLMSUrl = mainUrlList[idx]
-    driver.get(mainLMSUrl)
+    # Go Main LMS Page
+    # mainLMSUrl = mainUrlList[idx]
+    # driver.get(mainLMSUrl)
 
+    # Change Language Setup
     languangeChange = Select(driver.find_element_by_css_selector('#LANG'))
     languangeChange.select_by_index(0)
     # print("Translate Done")
 
+    # Get User Name
     userName = driver.find_element_by_xpath("//*[@id=\"user\"]").text
+
+    # Send Name to Android Client
     connection.sendall(bytes(userName + "\n", 'utf-8'))  # name
     print("\n ***** " + userName + " ***** \n")
 
-    outerLectures = driver.find_elements_by_class_name("sub_open")
+    # Get Lectures Link
+    # outerLectures = driver.find_elements_by_class_name("sub_open")
     # print(len(outerLectures))
-    connection.sendall(bytes(str(len(outerLectures)) + "\n", 'utf-8'))  # total lecture num
+    connection.sendall(bytes("0\n", 'utf-8'))  # total lecture num
     realLectureIdx = 0
+
+    # Go Total Lecture Page
     lectureListURL = lectureUrlList[idx]
     driver.get(lectureListURL)
 
-    totalLecturesList = []
-    for i in range(len(outerLectures)):
-        if check_exists_by_xpath("//*[@id=\"lecture_list\"]/div[1]/div[1]/div[" + str(i + 2) + "]"):
-            totalLecturesList.append("//*[@id=\"lecture_list\"]/div[1]/div[1]/div[" + str(i + 2) + "]")
+    # Get Lectures Number, but Not Exactly cause Previous Period, so Named 'Candidate'
+    candidate_lectures = 0
+
+    if check_exists_by_class_multi_elements('content-title'):
+        candidate_lectures = driver.find_elements_by_class_name('content-title')
+
+    # Get Inner Lecture Links
+    totalLecturesLink = []
+    for i in range(len(candidate_lectures)):
+        if check_exists_by_xpath("//*[@id=\"lecture_list\"]/div[1]/div[1]/div[" + str(i + 2) + "]/div/a"):
+            lectureLink = driver.find_element_by_xpath("//*[@id=\"lecture_list\"]/div[1]/div[1]/div["
+                                                       + str(i + 2) + "]/div/a").get_attribute('href')
+            # print(lectureLink)
+            totalLecturesLink.append(lectureLink)
         else:
             break
 
-    totalLecturesNum = len(totalLecturesList) - 1
     # print(totalLecturesNum)
-    connection.sendall(bytes(str(totalLecturesNum) + "\n", 'utf-8'))  # real total num
+    connection.sendall(bytes(str(len(totalLecturesLink)) + "\n", 'utf-8'))  # real total num
 
-    driver.get(mainLMSUrl)
-    outerLectures = driver.find_elements_by_class_name("sub_open")
-    # print(len(outerLectures))
+    # Get Lecture Information
+    for lecturesIdx in range(len(totalLecturesLink)):
+        # Go Total Lecture Page
+        driver.get(lectureListURL)
+        # print('lecturesIdx', lecturesIdx)
 
-    for outerLecturesIdx in range(totalLecturesNum):
-        # print(outerLecturesIdx)
-        removePopUp()
-        outerLectures[outerLecturesIdx].click()
+        # Go Inner Lecture Page
+        driver.find_element_by_xpath(
+            "//*[@id=\"lecture_list\"]/div[1]/div[1]/div[" + str(lecturesIdx + 2) + "]/div").click()
+
         lectureTitle = driver.find_element_by_class_name("welcome_subject").text
         lectureTitle = re.sub(r'\([^)]*\)', '', lectureTitle)
         lectureTitle = re.sub(r'\[[^)]*]', '', lectureTitle)
         lectureTitle = lectureTitle.replace('.', '').replace('#', '').replace('$', '')
         realLectureIdx += 1
 
+        # Send Lecture Title Name to Android Client
         connection.sendall(bytes(lectureTitle + "\n", 'utf-8'))  # lecture name
         print(" " + lectureTitle)
         innerLecture = driver.find_element_by_xpath("//*[@id=\"menu_lecture_weeks\"]")
@@ -149,30 +186,49 @@ def getLMSSubject(idx, connection):
 
         isNotAvailPeriod = False
 
+        # Get Lecture Percentage
         if check_exists_by_id("per_text"):
             innerTotalLectureLength = driver.find_elements_by_class_name("wb-inner-wrap ")
             driver.find_element_by_xpath("/ html / body / div[3] / div[2] / div / div[2] / div[2] / div[2] / "
-                                         "div / div[" + str(len(innerTotalLectureLength)) + "] / div").click()
+                                         "div / div[" + str(
+                len(innerTotalLectureLength)) + "] / div").click()  # last inner lecture
             driver.implicitly_wait(0.1)
 
-            if check_exists_by_xpath("/html/body/div[3]/div[2]/div/div[2]/div[2]/div[3]/div[1]/div[1]/div"):
+            # Check Lecture Period, Not in Period but Uploaded in Advance
+            if check_exists_by_xpath(
+                    "/html/body/div[3]/div[2]/div/div[2]/div[2]/div[3]/div[1]/div[1]/div"):
                 # print("try to go prev lecture")
 
+                prevLectureIdx = len(innerTotalLectureLength)
+
+                # Check Previous Lecture Available
                 if len(innerTotalLectureLength) > 1:
-                    driver.find_element_by_xpath("/ html / body / div[3] / div[2] / div / div[2] / div[2] / div[2] / "
-                                                 "div / div[" + str(
-                        len(innerTotalLectureLength) - 1) + "] / div").click()
+                    while prevLectureIdx > -1:  # 뒤부터 한 주차씩 돌면서 학습 기간인 강의 가져오기
+                        if (check_exists_by_xpath(
+                                '/html/body/div[3]/div[2]/div/div[2]/div[2]/div[3]/div/div[1]/div') and
+                                driver.find_element_by_xpath(
+                                    '/html/body/div[3]/div[2]/div/div[2]/div[2]/div[3]/div/div[1]/div').text == "학습 기간이 아닙니다."):
+                            prevLectureIdx = prevLectureIdx - 1
+                            driver.find_element_by_xpath(
+                                "/ html / body / div[3] / div[2] / div / div[2] / div[2] / div[2] / "
+                                "div / div[" + str(
+                                    prevLectureIdx) + "] / div").click()
+                        else:
+                            break
                     # print("succ to go prev lecture")
 
+                # UnAvailable Previous Lecture
                 else:
                     isNotAvailPeriod = True
                     # print("not exist prev lecture")
 
+            # Uploaded Properly Case
             if not isNotAvailPeriod:
                 # print("exist")
                 innerLecturePerTexts = driver.find_elements_by_id("per_text")
-                connection.sendall(bytes(str(len(innerLecturePerTexts)) + "\n", 'utf-8'))  # inner lecture num
+                tmp = driver.find_elements_by_id("per_text")[0].text
 
+                connection.sendall(bytes(str(len(innerLecturePerTexts)) + "\n", 'utf-8'))  # inner lecture num (n차시)
                 innerLecturePeriod = driver.find_element_by_xpath(
                     "//*[@id=\"lecture_form\"] / div[1] / div / ul / li[1] / ol / li[2] / div[2] ").text
                 # print(innerLecturePeriod)
@@ -192,8 +248,15 @@ def getLMSSubject(idx, connection):
             connection.sendall(bytes("0\n", 'utf-8'))
             # print("does not exist")
 
-        driver.get(driver.find_element_by_xpath("//*[@id=\"menu_report\"]").get_attribute("href"))
+        # '''''''''''''''''''''''''''no exist assignment tap'''''''''''''''''''''''''''''''''''#
+        try:
+            driver.get(driver.find_element_by_xpath("//*[@id=\"menu_report\"]").get_attribute("href"))
+        except:
+            print("no assignment tap")
+            connection.sendall(bytes("AssignmentDone\n", 'utf-8'))
+        # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''#
 
+        # Get Assignment
         if check_exists_by_xpath("//*[@id=\"report_list\"]/table/tbody/tr[1]/td[1]"):
             assignmentNum = driver.find_element_by_xpath("//*[@id=\"report_list\"]/table/tbody/tr[1]/td[1]").text
             # print("total assignment num: ", assignmentNum)
@@ -204,6 +267,7 @@ def getLMSSubject(idx, connection):
                 for i in range(int(assignmentNum)):
                     isAssignmentInPeriod = driver.find_element_by_xpath("//*[@id=\"report_list\"]/table/tbody/tr["
                                                                         + str(i + 1) + "]/td[4]").text
+
                     if isAssignmentInPeriod == "종료":
                         connection.sendall(bytes("AssignmentDone\n", 'utf-8'))
                         break
@@ -223,19 +287,22 @@ def getLMSSubject(idx, connection):
                     # print(isAssignmentSubmitted)
 
                     assignmentPeriod = driver.find_element_by_xpath("//*[@id=\"report_list\"]/table/tbody/tr["
-                                                                    + str(i + 1) + "]/td[8]").text
+                                                                    + str(
+                        i + 1) + "]/td[8]").text  # 지각제출 마감일 : 2021.~~~
+
+                    # slice (시작연도 2를 찾아서 거기부터 넘겨주기)
+                    slice_period = assignmentPeriod[assignmentPeriod.find("2"):]
                     connection.sendall(
-                        bytes(assignmentPeriod + "\n", 'utf-8'))  # if is assignment in period, get deadline
+                        bytes(slice_period + "\n", 'utf-8'))  # if is assignment in period, get deadline
                     # print(assignmentPeriod)
             else:
                 connection.sendall(bytes("AssignmentDone\n", 'utf-8'))
-
         # else:
-        # print("no assignment")
+        #     print("no assignment tap")
 
-        driver.get(mainLMSUrl)
-        removePopUp()
-        outerLectures = driver.find_elements_by_class_name("sub_open")
+        driver.get(lectureListURL)
+        # removePopUp()
+        # outerLectures = driver.find_elements_by_class_name("sub_open")
 
     connection.sendall(bytes("LectureDone\n", 'utf-8'))
     connection.sendall(bytes(str(realLectureIdx) + "\n", 'utf-8'))  # real lecture num
@@ -252,7 +319,7 @@ def handle(connection, address):
         if len(input.split("\n")) < 3:
             print(" Error Input Form")
             connection.sendall(bytes("Closing socket\n", 'utf-8'))
-            print(" Close Client Socket")
+            print(" Close Client Socket error")
             connection.close()
             print(" ======================================\n")
             print(" Waiting For Client ...")
@@ -324,4 +391,3 @@ if __name__ == "__main__":
             process.join()
 
     print(" All done")
-
